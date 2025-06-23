@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paris Bakery e Catalogue</title>
+<style>
+  :root {
+    --gap: 30px;
+    --badge-blur: 15px;
+    --card-radius: 16px;
+    --color-accent: #7dd8c0; /* Mint Green */
+    --color-bg: #f5fdfb;
+    --color-card: #ffffff;
+    --color-text: #2c3e50;
+    --color-border: #e0f0ea;
+    --color-hover: #4fbfa6;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--color-text);
+    background: var(--color-bg);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  h1 {
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 40px 0 25px;
+    font-size: 2.5rem;
+    color: var(--color-accent);
+  }
+
+  .category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .category-buttons button {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    padding: 10px 18px;
+    color: var(--color-text);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+  }
+
+  .category-buttons button:hover,
+  .category-buttons button.active {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .gallery {
+    width: 90vw;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap);
+    margin-bottom: 60px;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  .gallery-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+    padding: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .gallery-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+  }
+
+  .gallery-item > img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--card-radius);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .gallery-item > img:hover {
+    transform: scale(1.04);
+  }
+
+  .cake-number {
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-accent);
+    background: #e6f9f4;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+
+  .pagination {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .pagination button {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    padding: 12px 24px;
+    margin: 0 10px;
+    color: var(--color-text);
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .pagination button:hover:not(:disabled) {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  .pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<h1>Paris Bakery Catalogue</h1>
+
+<div class="category-buttons" id="categoryButtons"></div>
+<div class="gallery" id="gallery"></div>
+<div class="pagination">
+  <button id="prevBtn"> Previous</button>
+  <button id="nextBtn">Next </button>
+</div>
+
+<script>
+const gallery = document.getElementById("gallery");
+const categoryButtons = document.getElementById("categoryButtons");
+const categories = ["0.5KG","1KG","1.5KG","2KG","2.5KG","3KG","3.5KG","4KG","5KG","6KG","7KG","Above 7KG"];
+const imagesPerPage = 16;
+
+let currentCategory = categories[0];
+let currentPage = 1;
+const imageCounts = {
+  "0.5KG": 20,
+  "1KG": 40,
+  "1.5KG": 20,
+  "2KG": 25,
+  "2.5KG": 18,
+  "3KG": 22,
+  "3.5KG": 15,
+  "4KG": 30,
+  "5KG": 10,
+  "6KG": 8,
+  "7KG": 5,
+  "Above 7KG": 9
+};
+
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function renderCategoryButtons() {
+  categoryButtons.innerHTML = '';
+  categories.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.textContent = cat;
+    btn.classList.toggle("active", cat === currentCategory);
+    btn.addEventListener("click", () => {
+      currentCategory = cat;
+      currentPage = 1;
+      updateCategoryButtons();
+      loadPage(currentCategory, currentPage);
+    });
+    categoryButtons.appendChild(btn);
+  });
+}
+
+function updateCategoryButtons() {
+  Array.from(categoryButtons.children).forEach(btn => {
+    btn.classList.toggle("active", btn.textContent === currentCategory);
+  });
+}
+
+function loadPage(category, page) {
+  const totalImages = imageCounts[category] || 0;
+  const start = (page - 1) * imagesPerPage + 1;
+  const end = Math.min(start + imagesPerPage - 1, totalImages);
+
+  gallery.innerHTML = "";
+  for (let i = start; i <= end; i++) {
+    const imageName = `1 (${i}).jpeg`;
+    const imagePath = `images/${category}/${imageName}`;
+
+    const item = document.createElement("div");
+    item.className = "gallery-item";
+
+    const img = document.createElement("img");
+    img.src = imagePath;
+    img.alt = `Cake ${i}`;
+    img.onerror = () => item.remove();
+
+    const caption = document.createElement("div");
+    caption.className = "cake-number";
+    caption.textContent = `${category}#${String(i).padStart(4, '0')}`;
+
+    item.appendChild(img);
+    item.appendChild(caption);
+    gallery.appendChild(item);
+  }
+
+  prevBtn.disabled = page === 1;
+  nextBtn.disabled = page >= Math.ceil(totalImages / imagesPerPage);
+}
+
+prevBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    loadPage(currentCategory, currentPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+
+nextBtn.addEventListener("click", () => {
+  const total = imageCounts[currentCategory] || 0;
+  if (currentPage < Math.ceil(total / imagesPerPage)) {
+    currentPage++;
+    loadPage(currentCategory, currentPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+
+renderCategoryButtons();
+loadPage(currentCategory, currentPage);
+</script>
+
+</body>
+</html>

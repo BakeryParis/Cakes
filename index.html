@@ -1,252 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Paris Bakery Catalogue</title>
-<style>
-  :root {
-    --gap: 20px;
-    --badge-blur: 15px;
-    --card-radius: 16px;
-    --color-accent: #a889d0; /* lavender tone */
-    --color-bg: #f9f6ff;     /* soft lavender background */
-    --color-card: #ffffff;
-    --color-text: #3a2c4d;
-    --color-border: #e5dffc;
-    --color-hover: #c2a4ec;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paris Bakery Catalogue</title>
+  <style>
+    :root {
+      --gap: 20px;
+      --card-radius: 16px;
+      --color-accent: #a889d0;
+      --color-bg: #f9f6ff;
+      --color-card: #ffffff;
+      --color-text: #3a2c4d;
+      --color-border: #e5dffc;
+    }
 
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--color-text);
-    background: var(--color-bg);
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-  }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-  h1 {
-    text-align: center;
-    font-weight: 500;
-    letter-spacing: 1px;
-    margin: 40px 0 20px;
-    font-size: 2.2rem;
-    color: var(--color-accent);
-  }
+    h1 {
+      margin: 40px 0 20px;
+      font-size: 2.2rem;
+      color: var(--color-accent);
+      text-align: center;
+      font-weight: 500;
+    }
 
-  .category-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    padding: 0 10px;
-  }
+    .category-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 0 10px;
+    }
 
-  .category-buttons button {
-    background: #fff;
-    border: 1px solid var(--color-border);
-    padding: 8px 16px;
-    color: var(--color-text);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.25s ease;
-  }
+    .category-buttons button {
+      background: #fff;
+      border: 1px solid var(--color-border);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      transition: 0.25s;
+    }
 
-  .category-buttons button:hover,
-  .category-buttons button.active {
-    background: var(--color-accent);
-    color: #fff;
-    border-color: var(--color-accent);
-  }
+    .category-buttons button:hover,
+    .category-buttons button.active {
+      background: var(--color-accent);
+      color: #fff;
+      border-color: var(--color-accent);
+    }
 
-  .gallery {
-    width: 92vw;
-    max-width: 1200px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--gap);
-    margin-bottom: 40px;
-  }
+    .gallery {
+      width: 92vw;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--gap);
+      margin-bottom: 40px;
+    }
 
-  .gallery-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--card-radius);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-    padding: 8px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
+    .gallery-item {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--card-radius);
+      padding: 8px;
+      text-align: center;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    }
 
-  .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(168, 137, 208, 0.3);
-  }
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(168, 137, 208, 0.3);
+    }
 
-  .gallery-item > img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: var(--card-radius);
-    object-fit: cover;
-    cursor: pointer;
-  }
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: var(--card-radius);
+      cursor: pointer;
+    }
 
-  .cake-number {
-    margin-top: 10px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #000;
-    background: #f0eaff;
-    padding: 6px 12px;
-    border-radius: 6px;
-  }
+    .cake-number {
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: #f0eaff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      color: #000;
+    }
 
-  .pagination {
-    text-align: center;
-    margin-bottom: 40px;
-  }
+    .pagination {
+      text-align: center;
+      margin-bottom: 40px;
+    }
 
-  .pagination button {
-    background: #fff;
-    border: 1px solid var(--color-border);
-    padding: 10px 20px;
-    margin: 0 8px;
-    color: var(--color-text);
-    font-size: 0.95rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
+    .pagination button {
+      background: #fff;
+      border: 1px solid var(--color-border);
+      padding: 10px 20px;
+      margin: 0 8px;
+      color: var(--color-text);
+      font-size: 0.95rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-  .pagination button:hover:not(:disabled) {
-    background: var(--color-accent);
-    color: #fff;
-  }
+    .pagination button:hover:not(:disabled) {
+      background: var(--color-accent);
+      color: #fff;
+    }
 
-  .pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-</style>
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Improved Footer styles */
+    .footer {
+      width: 100%;
+      background: #ffffff;
+      border-top: 1px solid var(--color-border);
+      padding: 40px 20px;
+      box-shadow: 0 -4px 16px rgba(168, 137, 208, 0.08);
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+      font-size: 0.95rem;
+      color: var(--color-text);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .footer-links a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: 0.2s ease-in-out;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-accent);
+    }
+
+    .footer-links img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: 0.2s ease-in-out;
+    }
+
+    .social-icons a:hover {
+      color: var(--color-accent);
+    }
+
+    .social-icons img {
+      width: 28px;
+      height: 28px;
+      transition: transform 0.2s ease;
+    }
+
+    .social-icons img:hover {
+      transform: scale(1.1);
+    }
+  </style>
 </head>
 <body>
 
-<h1>Paris Bakery Catalogue</h1>
+  <h1>Paris Bakery Catalogue</h1>
 
-<div class="category-buttons" id="categoryButtons"></div>
-<div class="gallery" id="gallery"></div>
-<div class="pagination">
-  <button id="prevBtn">⟵ Previous</button>
-  <button id="nextBtn">Next ⟶</button>
-</div>
+  <div class="category-buttons" id="categoryButtons"></div>
+  <div class="gallery" id="gallery"></div>
+  <div class="pagination">
+    <button id="prevBtn">Previous</button>
+    <button id="nextBtn">Next</button>
+  </div>
 
-<script>
-const gallery = document.getElementById("gallery");
-const categoryButtons = document.getElementById("categoryButtons");
-const categories = ["0.5KG","1KG","1.5KG","2KG","2.5KG","3KG","3.5KG","4KG","5KG","6KG","7KG","Above 7KG"];
-const imagesPerPage = 16;
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="tel:8018114444" title="Call Paris Bakery">
+          <img src="https://img.icons8.com/ios-filled/50/phone.png" alt="Phone" />
+          <span>8018114444</span>
+        </a>
+        <a href="https://parisbakery.in" target="_blank" title="Visit Website">
+          <img src="https://img.icons8.com/ios-filled/50/domain.png" alt="Website" />
+          <span>parisbakery.in</span>
+        </a>
+      </div>
+      <div class="social-icons">
+        <a href="https://facebook.com/myparisbakery" target="_blank" title="Facebook">
+          <img src="https://img.icons8.com/ios-filled/50/facebook-new.png" alt="Facebook" />
+          <span>MyParisBakery</span>
+        </a>
+        <a href="https://instagram.com/parisbakery.in" target="_blank" title="Instagram">
+          <img src="https://img.icons8.com/ios-filled/50/instagram-new.png" alt="Instagram" />
+          <span>parisbakery.in</span>
+        </a>
+      </div>
+    </div>
+  </footer>
 
-let currentCategory = categories[0];
-let currentPage = 1;
-const imageCounts = {
-  "0.5KG": 20,
-  "1KG": 40,
-  "1.5KG": 20,
-  "2KG": 25,
-  "2.5KG": 18,
-  "3KG": 22,
-  "3.5KG": 15,
-  "4KG": 30,
-  "5KG": 10,
-  "6KG": 8,
-  "7KG": 5,
-  "Above 7KG": 9
-};
+  <script>
+    const gallery = document.getElementById("gallery");
+    const categoryButtons = document.getElementById("categoryButtons");
+    const categories = ["0.5KG","1KG","1.5KG","2KG","2.5KG","3KG","3.5KG","4KG","5KG","6KG","7KG","Above 7KG"];
+    const imagesPerPage = 16;
+    let currentCategory = categories[0];
+    let currentPage = 1;
 
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
+    const imageCounts = {
+      "0.5KG": 20,
+      "1KG": 40,
+      "1.5KG": 20,
+      "2KG": 25,
+      "2.5KG": 18,
+      "3KG": 22,
+      "3.5KG": 15,
+      "4KG": 30,
+      "5KG": 10,
+      "6KG": 8,
+      "7KG": 5,
+      "Above 7KG": 9
+    };
 
-function renderCategoryButtons() {
-  categoryButtons.innerHTML = '';
-  categories.forEach(cat => {
-    const btn = document.createElement("button");
-    btn.textContent = cat;
-    btn.classList.toggle("active", cat === currentCategory);
-    btn.addEventListener("click", () => {
-      currentCategory = cat;
-      currentPage = 1;
-      updateCategoryButtons();
-      loadPage(currentCategory, currentPage);
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function renderCategoryButtons() {
+      categoryButtons.innerHTML = '';
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        btn.classList.toggle("active", cat === currentCategory);
+        btn.addEventListener("click", () => {
+          currentCategory = cat;
+          currentPage = 1;
+          updateCategoryButtons();
+          loadPage(currentCategory, currentPage);
+        });
+        categoryButtons.appendChild(btn);
+      });
+    }
+
+    function updateCategoryButtons() {
+      Array.from(categoryButtons.children).forEach(btn => {
+        btn.classList.toggle("active", btn.textContent === currentCategory);
+      });
+    }
+
+    function loadPage(category, page) {
+      const totalImages = imageCounts[category] || 0;
+      const start = (page - 1) * imagesPerPage + 1;
+      const end = Math.min(start + imagesPerPage - 1, totalImages);
+
+      gallery.innerHTML = "";
+      for (let i = start; i <= end; i++) {
+        const imageName = `1 (${i}).jpeg`;
+        const imagePath = `images/${category}/${imageName}`;
+
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+
+        const img = document.createElement("img");
+        img.src = imagePath;
+        img.alt = `Cake ${i}`;
+        img.onerror = () => item.remove();
+
+        const caption = document.createElement("div");
+        caption.className = "cake-number";
+        caption.textContent = `${category}#${String(i).padStart(4, '0')}`;
+
+        item.appendChild(img);
+        item.appendChild(caption);
+        gallery.appendChild(item);
+      }
+
+      prevBtn.disabled = page === 1;
+      nextBtn.disabled = page >= Math.ceil(totalImages / imagesPerPage);
+    }
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        loadPage(currentCategory, currentPage);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
-    categoryButtons.appendChild(btn);
-  });
-}
 
-function updateCategoryButtons() {
-  Array.from(categoryButtons.children).forEach(btn => {
-    btn.classList.toggle("active", btn.textContent === currentCategory);
-  });
-}
+    nextBtn.addEventListener("click", () => {
+      const total = imageCounts[currentCategory] || 0;
+      if (currentPage < Math.ceil(total / imagesPerPage)) {
+        currentPage++;
+        loadPage(currentCategory, currentPage);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
 
-function loadPage(category, page) {
-  const totalImages = imageCounts[category] || 0;
-  const start = (page - 1) * imagesPerPage + 1;
-  const end = Math.min(start + imagesPerPage - 1, totalImages);
-
-  gallery.innerHTML = "";
-  for (let i = start; i <= end; i++) {
-    const imageName = `1 (${i}).jpeg`;
-    const imagePath = `images/${category}/${imageName}`;
-
-    const item = document.createElement("div");
-    item.className = "gallery-item";
-
-    const img = document.createElement("img");
-    img.src = imagePath;
-    img.alt = `Cake ${i}`;
-    img.onerror = () => item.remove();
-
-    const caption = document.createElement("div");
-    caption.className = "cake-number";
-    caption.textContent = `${category}#${String(i).padStart(4, '0')}`;
-
-    item.appendChild(img);
-    item.appendChild(caption);
-    gallery.appendChild(item);
-  }
-
-  prevBtn.disabled = page === 1;
-  nextBtn.disabled = page >= Math.ceil(totalImages / imagesPerPage);
-}
-
-prevBtn.addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
+    renderCategoryButtons();
     loadPage(currentCategory, currentPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-});
-
-nextBtn.addEventListener("click", () => {
-  const total = imageCounts[currentCategory] || 0;
-  if (currentPage < Math.ceil(total / imagesPerPage)) {
-    currentPage++;
-    loadPage(currentCategory, currentPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-});
-
-renderCategoryButtons();
-loadPage(currentCategory, currentPage);
-</script>
-
+  </script>
 </body>
 </html>

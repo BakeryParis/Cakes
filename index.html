@@ -8,11 +8,11 @@
     :root {
       --gap: 20px;
       --card-radius: 16px;
-      --color-accent: #a889d0;
-      --color-bg: #f9f6ff;
+      --color-accent: #e91e63; /* Updated to match logo pink */
+      --color-bg: #fff0f5;      /* Light pink background */
       --color-card: #ffffff;
       --color-text: #3a2c4d;
-      --color-border: #e5dffc;
+      --color-border: #f8cde2;
     }
 
     body {
@@ -26,12 +26,17 @@
       min-height: 100vh;
     }
 
+    .logo {
+      margin-top: 30px;
+      max-width: 260px;
+    }
+
     h1 {
-      margin: 40px 0 20px;
+      margin: 10px 0 20px;
       font-size: 2.2rem;
       color: var(--color-accent);
       text-align: center;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .category-buttons {
@@ -82,7 +87,7 @@
 
     .gallery-item:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(168, 137, 208, 0.3);
+      box-shadow: 0 8px 20px rgba(233, 30, 99, 0.2);
     }
 
     .gallery-item img {
@@ -97,7 +102,7 @@
       margin-top: 10px;
       font-weight: 600;
       font-size: 0.95rem;
-      background: #f0eaff;
+      background: #ffe0ec;
       padding: 6px 12px;
       border-radius: 6px;
       color: #000;
@@ -130,13 +135,12 @@
       cursor: not-allowed;
     }
 
-    /* Improved Footer styles */
     .footer {
       width: 100%;
       background: #ffffff;
       border-top: 1px solid var(--color-border);
       padding: 40px 20px;
-      box-shadow: 0 -4px 16px rgba(168, 137, 208, 0.08);
+      box-shadow: 0 -4px 16px rgba(233, 30, 99, 0.08);
       margin-top: auto;
     }
 
@@ -152,37 +156,15 @@
       color: var(--color-text);
     }
 
-    .footer-links {
+    .footer-links,
+    .social-icons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 25px;
     }
 
-    .footer-links a {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: var(--color-text);
-      transition: 0.2s ease-in-out;
-    }
-
-    .footer-links a:hover {
-      color: var(--color-accent);
-    }
-
-    .footer-links img {
-      width: 22px;
-      height: 22px;
-    }
-
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
+    .footer-links a,
     .social-icons a {
       display: flex;
       align-items: center;
@@ -192,13 +174,15 @@
       transition: 0.2s ease-in-out;
     }
 
+    .footer-links a:hover,
     .social-icons a:hover {
       color: var(--color-accent);
     }
 
+    .footer-links img,
     .social-icons img {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       transition: transform 0.2s ease;
     }
 
@@ -209,10 +193,19 @@
 </head>
 <body>
 
-  <h1>Paris Bakery Catalogue</h1>
+  <!-- Logo -->
+  <img src="logo.png" alt="Paris Bakery Logo" class="logo" />
 
+  <!-- Title -->
+  <h1>Paris Bakery Digital Catalogue</h1>
+
+  <!-- Category Buttons -->
   <div class="category-buttons" id="categoryButtons"></div>
+
+  <!-- Gallery -->
   <div class="gallery" id="gallery"></div>
+
+  <!-- Pagination -->
   <div class="pagination">
     <button id="prevBtn">Previous</button>
     <button id="nextBtn">Next</button>
@@ -222,21 +215,21 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-links">
-        <a href="tel:8018114444" title="Call Paris Bakery">
+        <a href="tel:8018114444">
           <img src="https://img.icons8.com/ios-filled/50/phone.png" alt="Phone" />
           <span>8018114444</span>
         </a>
-        <a href="https://parisbakery.in" target="_blank" title="Visit Website">
+        <a href="https://parisbakery.in" target="_blank">
           <img src="https://img.icons8.com/ios-filled/50/domain.png" alt="Website" />
           <span>parisbakery.in</span>
         </a>
       </div>
       <div class="social-icons">
-        <a href="https://facebook.com/myparisbakery" target="_blank" title="Facebook">
+        <a href="https://facebook.com/myparisbakery" target="_blank">
           <img src="https://img.icons8.com/ios-filled/50/facebook-new.png" alt="Facebook" />
           <span>MyParisBakery</span>
         </a>
-        <a href="https://instagram.com/parisbakery.in" target="_blank" title="Instagram">
+        <a href="https://instagram.com/parisbakery.in" target="_blank">
           <img src="https://img.icons8.com/ios-filled/50/instagram-new.png" alt="Instagram" />
           <span>parisbakery.in</span>
         </a>
@@ -244,6 +237,7 @@
     </div>
   </footer>
 
+  <!-- JS Script -->
   <script>
     const gallery = document.getElementById("gallery");
     const categoryButtons = document.getElementById("categoryButtons");

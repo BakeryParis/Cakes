@@ -4,130 +4,138 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Paris Bakery Catalogue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --gap: 20px;
-      --card-radius: 16px;
-      --color-accent: #e91e63; /* Updated to match logo pink */
-      --color-bg: #fff0f5;      /* Light pink background */
-      --color-card: #ffffff;
-      --color-text: #3a2c4d;
-      --color-border: #f8cde2;
+      --primary-color: #e91e63;
+      --bg-pattern: url("https://www.transparenttextures.com/patterns/symphony.png");
+      --card-bg: rgba(255, 255, 255, 0.25);
+      --border-color: rgba(255, 255, 255, 0.18);
+      --text-color: #2f2f2f;
+      --font-title: 'Playfair Display', serif;
+      --font-body: 'Inter', sans-serif;
+      --radius: 20px;
     }
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--color-bg);
-      color: var(--color-text);
+      padding: 0;
+      font-family: var(--font-body);
+      color: var(--text-color);
+      background: var(--bg-pattern), linear-gradient(to bottom right, #ffe4ec, #f9f9f9);
+      background-blend-mode: overlay;
+      background-size: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      backdrop-filter: blur(2px);
     }
 
     .logo {
       margin-top: 30px;
-      max-width: 260px;
+      max-width: 200px;
+      filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.1));
     }
 
     h1 {
-      margin: 10px 0 20px;
-      font-size: 2.2rem;
-      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin: 16px 0 30px;
       text-align: center;
-      font-weight: 600;
     }
 
     .category-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      padding: 0 10px;
+      gap: 12px;
+      margin-bottom: 30px;
     }
 
     .category-buttons button {
-      background: #fff;
-      border: 1px solid var(--color-border);
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(5px);
+      border: 1px solid var(--border-color);
+      padding: 10px 20px;
+      border-radius: 999px;
       font-size: 0.9rem;
-      color: var(--color-text);
-      transition: 0.25s;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: all 0.3s ease;
     }
 
     .category-buttons button:hover,
     .category-buttons button.active {
-      background: var(--color-accent);
+      background: var(--primary-color);
       color: #fff;
-      border-color: var(--color-accent);
+      border-color: var(--primary-color);
     }
 
     .gallery {
       width: 92vw;
       max-width: 1200px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: var(--gap);
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 24px;
       margin-bottom: 40px;
     }
 
     .gallery-item {
-      background: var(--color-card);
-      border: 1px solid var(--color-border);
-      border-radius: var(--card-radius);
-      padding: 8px;
-      text-align: center;
-      transition: 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .gallery-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(233, 30, 99, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     }
 
     .gallery-item img {
       width: 100%;
       aspect-ratio: 1 / 1;
       object-fit: cover;
-      border-radius: var(--card-radius);
-      cursor: pointer;
     }
 
     .cake-number {
-      margin-top: 10px;
+      padding: 10px;
       font-weight: 600;
       font-size: 0.95rem;
-      background: #ffe0ec;
-      padding: 6px 12px;
-      border-radius: 6px;
-      color: #000;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
     }
 
     .pagination {
+      margin-bottom: 50px;
       text-align: center;
-      margin-bottom: 40px;
     }
 
     .pagination button {
-      background: #fff;
-      border: 1px solid var(--color-border);
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--border-color);
       padding: 10px 20px;
-      margin: 0 8px;
-      color: var(--color-text);
-      font-size: 0.95rem;
-      border-radius: 8px;
+      border-radius: 999px;
+      font-size: 1rem;
       cursor: pointer;
+      margin: 0 8px;
       transition: 0.3s;
+      color: var(--text-color);
+      backdrop-filter: blur(4px);
     }
 
     .pagination button:hover:not(:disabled) {
-      background: var(--color-accent);
-      color: #fff;
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
     }
 
     .pagination button:disabled {
@@ -137,11 +145,11 @@
 
     .footer {
       width: 100%;
-      background: #ffffff;
-      border-top: 1px solid var(--color-border);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(6px);
+      border-top: 1px solid var(--border-color);
       padding: 40px 20px;
-      box-shadow: 0 -4px 16px rgba(233, 30, 99, 0.08);
-      margin-top: auto;
+      text-align: center;
     }
 
     .footer-content {
@@ -149,11 +157,9 @@
       margin: auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
       gap: 20px;
       font-size: 0.95rem;
-      color: var(--color-text);
+      color: var(--text-color);
     }
 
     .footer-links,
@@ -161,33 +167,28 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 25px;
+      gap: 20px;
     }
 
     .footer-links a,
     .social-icons a {
       display: flex;
       align-items: center;
-      gap: 8px;
       text-decoration: none;
-      color: var(--color-text);
-      transition: 0.2s ease-in-out;
+      color: var(--text-color);
+      gap: 8px;
+      transition: color 0.2s ease;
     }
 
     .footer-links a:hover,
     .social-icons a:hover {
-      color: var(--color-accent);
+      color: var(--primary-color);
     }
 
     .footer-links img,
     .social-icons img {
-      width: 24px;
-      height: 24px;
-      transition: transform 0.2s ease;
-    }
-
-    .social-icons img:hover {
-      transform: scale(1.1);
+      width: 22px;
+      height: 22px;
     }
   </style>
 </head>
@@ -241,7 +242,7 @@
   <script>
     const gallery = document.getElementById("gallery");
     const categoryButtons = document.getElementById("categoryButtons");
-    const categories = ["0.5KG","1KG","1.5KG","2KG","2.5KG","3KG","3.5KG","4KG","5KG","6KG","7KG","Above 7KG"];
+    const categories = ["0.5KG", "1KG", "1.5KG", "2KG", "2.5KG", "3KG", "3.5KG", "4KG", "5KG", "6KG", "7KG", "Above 7KG"];
     const imagesPerPage = 16;
     let currentCategory = categories[0];
     let currentPage = 1;

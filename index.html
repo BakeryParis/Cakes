@@ -4,138 +4,136 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Paris Bakery Catalogue</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary-color: #e91e63;
-      --bg-pattern: url("https://www.transparenttextures.com/patterns/symphony.png");
-      --card-bg: rgba(255, 255, 255, 0.25);
-      --border-color: rgba(255, 255, 255, 0.18);
-      --text-color: #2f2f2f;
-      --font-title: 'Playfair Display', serif;
-      --font-body: 'Inter', sans-serif;
-      --radius: 20px;
+      --gap: 20px;
+      --card-radius: 16px;
+      --color-accent: #e91e63;
+      --color-bg: #fff0f5;
+      --color-card: #ffffff;
+      --color-text: #3a2c4d;
+      --color-border: #f8cde2;
     }
 
     body {
       margin: 0;
-      padding: 0;
-      font-family: var(--font-body);
-      color: var(--text-color);
-      background: var(--bg-pattern), linear-gradient(to bottom right, #ffe4ec, #f9f9f9);
-      background-blend-mode: overlay;
-      background-size: auto;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      backdrop-filter: blur(2px);
     }
 
     .logo {
       margin-top: 30px;
-      max-width: 200px;
-      filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.1));
+      max-width: 260px;
     }
 
     h1 {
-      font-family: var(--font-title);
-      font-size: 2.5rem;
-      color: var(--primary-color);
-      margin: 16px 0 30px;
+      margin: 10px 0 20px;
+      font-size: 2.2rem;
+      color: var(--color-accent);
       text-align: center;
+      font-weight: 600;
     }
 
     .category-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
-      margin-bottom: 30px;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 0 10px;
     }
 
     .category-buttons button {
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(5px);
-      border: 1px solid var(--border-color);
-      padding: 10px 20px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      background: #fff;
+      border: 1px solid var(--color-border);
+      padding: 8px 16px;
+      border-radius: 8px;
       cursor: pointer;
-      color: var(--text-color);
-      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      transition: 0.25s;
     }
 
     .category-buttons button:hover,
     .category-buttons button.active {
-      background: var(--primary-color);
+      background: var(--color-accent);
       color: #fff;
-      border-color: var(--primary-color);
+      border-color: var(--color-accent);
     }
 
     .gallery {
       width: 92vw;
       max-width: 1200px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--gap);
       margin-bottom: 40px;
     }
 
     .gallery-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--card-radius);
+      padding: 8px;
+      text-align: center;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
     }
 
     .gallery-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(233, 30, 99, 0.2);
     }
 
     .gallery-item img {
       width: 100%;
       aspect-ratio: 1 / 1;
       object-fit: cover;
+      border-radius: var(--card-radius);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .gallery-item img.loaded {
+      opacity: 1;
     }
 
     .cake-number {
-      padding: 10px;
+      margin-top: 10px;
       font-weight: 600;
       font-size: 0.95rem;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(4px);
+      background: #ffe0ec;
+      padding: 6px 12px;
+      border-radius: 6px;
+      color: #000;
     }
 
     .pagination {
-      margin-bottom: 50px;
       text-align: center;
+      margin-bottom: 40px;
     }
 
     .pagination button {
-      background: rgba(255, 255, 255, 0.6);
-      border: 1px solid var(--border-color);
+      background: #fff;
+      border: 1px solid var(--color-border);
       padding: 10px 20px;
-      border-radius: 999px;
-      font-size: 1rem;
-      cursor: pointer;
       margin: 0 8px;
+      color: var(--color-text);
+      font-size: 0.95rem;
+      border-radius: 8px;
+      cursor: pointer;
       transition: 0.3s;
-      color: var(--text-color);
-      backdrop-filter: blur(4px);
     }
 
     .pagination button:hover:not(:disabled) {
-      background: var(--primary-color);
-      color: white;
-      border-color: var(--primary-color);
+      background: var(--color-accent);
+      color: #fff;
     }
 
     .pagination button:disabled {
@@ -145,11 +143,11 @@
 
     .footer {
       width: 100%;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(6px);
-      border-top: 1px solid var(--border-color);
+      background: #ffffff;
+      border-top: 1px solid var(--color-border);
       padding: 40px 20px;
-      text-align: center;
+      box-shadow: 0 -4px 16px rgba(233, 30, 99, 0.08);
+      margin-top: auto;
     }
 
     .footer-content {
@@ -157,9 +155,11 @@
       margin: auto;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      text-align: center;
       gap: 20px;
       font-size: 0.95rem;
-      color: var(--text-color);
+      color: var(--color-text);
     }
 
     .footer-links,
@@ -167,52 +167,48 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 25px;
     }
 
     .footer-links a,
     .social-icons a {
       display: flex;
       align-items: center;
-      text-decoration: none;
-      color: var(--text-color);
       gap: 8px;
-      transition: color 0.2s ease;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: 0.2s ease-in-out;
     }
 
     .footer-links a:hover,
     .social-icons a:hover {
-      color: var(--primary-color);
+      color: var(--color-accent);
     }
 
     .footer-links img,
     .social-icons img {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.2s ease;
+    }
+
+    .social-icons img:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo -->
   <img src="logo.png" alt="Paris Bakery Logo" class="logo" />
-
-  <!-- Title -->
   <h1>Digital Catalogue</h1>
-
-  <!-- Category Buttons -->
   <div class="category-buttons" id="categoryButtons"></div>
-
-  <!-- Gallery -->
   <div class="gallery" id="gallery"></div>
 
-  <!-- Pagination -->
   <div class="pagination">
     <button id="prevBtn">Previous</button>
     <button id="nextBtn">Next</button>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-links">
@@ -238,7 +234,6 @@
     </div>
   </footer>
 
-  <!-- JS Script -->
   <script>
     const gallery = document.getElementById("gallery");
     const categoryButtons = document.getElementById("categoryButtons");
@@ -248,18 +243,9 @@
     let currentPage = 1;
 
     const imageCounts = {
-      "0.5KG": 20,
-      "1KG": 40,
-      "1.5KG": 20,
-      "2KG": 25,
-      "2.5KG": 18,
-      "3KG": 22,
-      "3.5KG": 15,
-      "4KG": 30,
-      "5KG": 10,
-      "6KG": 8,
-      "7KG": 5,
-      "Above 7KG": 9
+      "0.5KG": 20, "1KG": 40, "1.5KG": 20, "2KG": 25,
+      "2.5KG": 18, "3KG": 22, "3.5KG": 15, "4KG": 30,
+      "5KG": 10, "6KG": 8, "7KG": 5, "Above 7KG": 9
     };
 
     const prevBtn = document.getElementById("prevBtn");
@@ -303,7 +289,11 @@
         const img = document.createElement("img");
         img.src = imagePath;
         img.alt = `Cake ${i}`;
+        img.loading = "lazy";
         img.onerror = () => item.remove();
+        img.addEventListener("load", () => {
+          img.classList.add("loaded");
+        });
 
         const caption = document.createElement("div");
         caption.className = "cake-number";

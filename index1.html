@@ -26,11 +26,6 @@
       min-height: 100vh;
     }
 
-    .logo {
-      margin-top: 30px;
-      max-width: 260px;
-    }
-
     h1 {
       margin: 10px 0 20px;
       font-size: 2.2rem;
@@ -196,48 +191,60 @@
       transform: scale(1.1);
     }
 
-    /* Modal Styles */
+    /* Modal */
     #orderModal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0,0,0,0.5);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 1000;
     }
-    #orderModal .modal {
-      background: white;
+
+    .modal {
+      background: #fff;
       padding: 20px;
       border-radius: 10px;
-      width: 90%;
       max-width: 400px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 90%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
-    #orderModal label {
+
+    .modal label {
+      margin: 10px 0 5px;
+      display: block;
       font-weight: bold;
-      margin-top: 10px;
     }
-    #orderModal input, #orderModal textarea {
+
+    .modal input,
+    .modal select,
+    .modal textarea {
       width: 100%;
       padding: 8px;
       margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
-    .modal-actions {
+
+    .modal-buttons {
       text-align: right;
     }
-    .modal-actions button {
+
+    .modal-buttons button {
       padding: 8px 16px;
-      border: none;
       border-radius: 6px;
+      border: none;
+      margin-left: 10px;
       cursor: pointer;
     }
-    #sendBtn { background: #25d366; color: white; margin-left: 10px; }
+
+    #sendBtn { background: #25d366; color: #fff; }
     #cancelBtn { background: #ccc; }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="Paris Bakery Logo" class="logo" />
+
   <h1>Digital Catalogue</h1>
   <div class="category-buttons" id="categoryButtons"></div>
   <div class="gallery" id="gallery"></div>
@@ -250,45 +257,34 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-links">
-        <a href="tel:8018114444">
-          <img src="https://img.icons8.com/ios-filled/50/phone.png" alt="Phone" />
-          <span>8018114444</span>
-        </a>
-        <a href="https://parisbakery.in" target="_blank">
-          <img src="https://img.icons8.com/ios-filled/50/domain.png" alt="Website" />
-          <span>parisbakery.in</span>
-        </a>
+        <a href="tel:8018114444"><img src="https://img.icons8.com/ios-filled/50/phone.png" alt="Phone" />8018114444</a>
+        <a href="https://parisbakery.in" target="_blank"><img src="https://img.icons8.com/ios-filled/50/domain.png" alt="Website" />parisbakery.in</a>
       </div>
       <div class="social-icons">
-        <a href="https://facebook.com/myparisbakery" target="_blank">
-          <img src="https://img.icons8.com/ios-filled/50/facebook-new.png" alt="Facebook" />
-          <span>MyParisBakery</span>
-        </a>
-        <a href="https://instagram.com/parisbakery.in" target="_blank">
-          <img src="https://img.icons8.com/ios-filled/50/instagram-new.png" alt="Instagram" />
-          <span>parisbakery.in</span>
-        </a>
+        <a href="https://facebook.com/myparisbakery" target="_blank"><img src="https://img.icons8.com/ios-filled/50/facebook-new.png" alt="Facebook" />MyParisBakery</a>
+        <a href="https://instagram.com/parisbakery.in" target="_blank"><img src="https://img.icons8.com/ios-filled/50/instagram-new.png" alt="Instagram" />parisbakery.in</a>
       </div>
     </div>
   </footer>
 
+  <!-- Order Modal -->
   <div id="orderModal">
     <div class="modal">
       <h2>Send Order via WhatsApp</h2>
-      <label>Store Name</label>
-      <input type="text" id="storeInput" list="storeList" placeholder="Search store..." />
-      <datalist id="storeList">
-        <option value="sahid nagar">
-        <option value="vn marg">
-      </datalist>
+      <label>Store</label>
+      <select id="storeDropdown">
+        <option value="">-- Select Store --</option>
+        <option value="sahid nagar">Sahid Nagar</option>
+        <option value="vn marg">V.N. Marg</option>
+      </select>
 
       <label>Your Name</label>
       <input type="text" id="nameInput" placeholder="Enter your name" />
 
       <label>Instructions</label>
-      <textarea id="instructionInput" placeholder="E.g. write name on cake..." rows="3"></textarea>
+      <textarea id="instructionInput" placeholder="e.g. Write Happy Birthday" rows="3"></textarea>
 
-      <div class="modal-actions">
+      <div class="modal-buttons">
         <button id="cancelBtn">Cancel</button>
         <button id="sendBtn">Send</button>
       </div>
@@ -299,17 +295,19 @@
     const gallery = document.getElementById("gallery");
     const categoryButtons = document.getElementById("categoryButtons");
     const categories = ["0.5KG", "1KG", "1.5KG", "2KG", "2.5KG", "3KG", "3.5KG", "4KG", "5KG", "6KG", "7KG", "Above 7KG"];
-    const imageCounts = {"0.5KG": 20, "1KG": 40, "1.5KG": 20, "2KG": 25, "2.5KG": 18, "3KG": 22, "3.5KG": 15, "4KG": 30, "5KG": 10, "6KG": 8, "7KG": 5, "Above 7KG": 9};
+    const imageCounts = {
+      "0.5KG": 20, "1KG": 40, "1.5KG": 20, "2KG": 25,
+      "2.5KG": 18, "3KG": 22, "3.5KG": 15, "4KG": 30,
+      "5KG": 10, "6KG": 8, "7KG": 5, "Above 7KG": 9
+    };
     const imagesPerPage = 16;
     let currentCategory = categories[0];
     let currentPage = 1;
     let selectedImage = "";
 
     const storeNumbers = {
-      "SAHID NAGAR": "+917682806910",
-      "VIVEKANADA MARG": "+917682806902",
-      "SAILASRI VIHAR": "+917682806919",
-      "UNIT-4": "+917682806901"
+      "sahid nagar": "+917682806910",
+      "vn marg": "+917682806902"
     };
 
     function renderCategoryButtons() {
@@ -322,7 +320,7 @@
           currentCategory = cat;
           currentPage = 1;
           updateCategoryButtons();
-          loadPage(currentCategory, currentPage);
+          loadPage("left");
         };
         categoryButtons.appendChild(btn);
       });
@@ -334,72 +332,90 @@
       });
     }
 
-    function loadPage(category, page) {
-      const totalImages = imageCounts[category] || 0;
-      const start = (page - 1) * imagesPerPage + 1;
+    function loadPage(direction = "right") {
+      const totalImages = imageCounts[currentCategory];
+      const start = (currentPage - 1) * imagesPerPage + 1;
       const end = Math.min(start + imagesPerPage - 1, totalImages);
       gallery.innerHTML = "";
 
       for (let i = start; i <= end; i++) {
-        const imagePath = `images/${category}/1 (${i}).jpeg`;
+        const imgName = `1 (${i}).jpeg`;
+        const imgPath = `images/${currentCategory}/${imgName}`;
+        const imgURL = window.location.origin + '/' + imgPath;
+
         const item = document.createElement("div");
         item.className = "gallery-item";
 
         const img = document.createElement("img");
-        img.src = imagePath;
+        img.src = imgPath;
         img.alt = `Cake ${i}`;
-        img.onload = () => img.classList.add("loaded");
+        img.loading = "lazy";
+        img.addEventListener("load", () => img.classList.add("loaded"));
         img.onclick = () => {
-          selectedImage = imagePath;
+          selectedImage = imgURL;
           document.getElementById("orderModal").style.display = "flex";
         };
 
         const caption = document.createElement("div");
         caption.className = "cake-number";
-        caption.textContent = `${category}#${String(i).padStart(4, '0')}`;
+        caption.textContent = `${currentCategory}#${String(i).padStart(4, '0')}`;
 
         item.appendChild(img);
         item.appendChild(caption);
         gallery.appendChild(item);
       }
+
+      document.getElementById("prevBtn").disabled = currentPage === 1;
+      document.getElementById("nextBtn").disabled = currentPage >= Math.ceil(totalImages / imagesPerPage);
     }
 
     document.getElementById("prevBtn").onclick = () => {
       if (currentPage > 1) {
         currentPage--;
-        loadPage(currentCategory, currentPage);
+        loadPage("right");
+        scrollTo(0, 0);
       }
     };
 
     document.getElementById("nextBtn").onclick = () => {
-      const total = imageCounts[currentCategory] || 0;
+      const total = imageCounts[currentCategory];
       if (currentPage < Math.ceil(total / imagesPerPage)) {
         currentPage++;
-        loadPage(currentCategory, currentPage);
+        loadPage("left");
+        scrollTo(0, 0);
       }
     };
 
+    // Modal logic
     document.getElementById("cancelBtn").onclick = () => {
       document.getElementById("orderModal").style.display = "none";
     };
 
     document.getElementById("sendBtn").onclick = () => {
-      const store = document.getElementById("storeInput").value.trim().toLowerCase();
+      const store = document.getElementById("storeDropdown").value.toLowerCase().trim();
       const name = document.getElementById("nameInput").value.trim();
       const instructions = document.getElementById("instructionInput").value.trim();
-      let whatsapp = storeNumbers[store];
 
-      if (!store || !name) return alert("Please fill all required fields.");
-      if (!whatsapp) whatsapp = prompt("No WhatsApp number found for this store. Please enter manually:");
+      if (!store || !name) {
+        alert("Please fill in all required fields.");
+        return;
+      }
 
-      const msg = `Cake Order:\nStore: ${store}\nName: ${name}\nInstructions: ${instructions}\nImage: ${selectedImage}`;
-      const url = `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
+      let whatsappNumber = storeNumbers[store];
+      if (!whatsappNumber) {
+        whatsappNumber = prompt("Enter WhatsApp number for this store:");
+        if (!whatsappNumber) return;
+      }
+
+      const msg = `*Cake Order Request* 🍰\n\n*Name:* ${name}\n*Store:* ${store}\n*Instructions:* ${instructions}\n*Image:* ${selectedImage}`;
+      const url = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
       document.getElementById("orderModal").style.display = "none";
     };
 
     renderCategoryButtons();
-    loadPage(currentCategory, currentPage);
+    loadPage();
   </script>
+
 </body>
 </html>

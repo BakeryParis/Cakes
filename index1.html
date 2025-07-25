@@ -26,6 +26,11 @@
       min-height: 100vh;
     }
 
+    .logo {
+      margin-top: 30px;
+      max-width: 260px;
+    }
+
     h1 {
       margin: 10px 0 20px;
       font-size: 2.2rem;
@@ -193,58 +198,62 @@
 
     /* Modal */
     #orderModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
       display: none;
-      align-items: center;
+      position: fixed;
+      z-index: 10000;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
       justify-content: center;
-      z-index: 1000;
+      align-items: center;
     }
 
-    .modal {
-      background: #fff;
+    .modal-content {
+      background: white;
       padding: 20px;
       border-radius: 10px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
 
-    .modal label {
-      margin: 10px 0 5px;
+    .modal-content h3 {
+      margin-top: 0;
+      color: var(--color-accent);
+    }
+
+    .modal-content label {
       display: block;
-      font-weight: bold;
+      margin: 10px 0 5px;
     }
 
-    .modal input,
-    .modal select,
-    .modal textarea {
+    .modal-content select,
+    .modal-content input,
+    .modal-content textarea {
       width: 100%;
       padding: 8px;
-      margin-bottom: 10px;
       border-radius: 6px;
       border: 1px solid #ccc;
     }
 
-    .modal-buttons {
-      text-align: right;
-    }
-
-    .modal-buttons button {
-      padding: 8px 16px;
-      border-radius: 6px;
+    .modal-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: var(--color-accent);
+      color: white;
       border: none;
-      margin-left: 10px;
+      border-radius: 8px;
       cursor: pointer;
     }
 
-    #sendBtn { background: #25d366; color: #fff; }
-    #cancelBtn { background: #ccc; }
+    .modal-content .cancel {
+      background: gray;
+      margin-right: 10px;
+    }
+
   </style>
 </head>
 <body>
 
+  <img src="logo.png" alt="Paris Bakery Logo" class="logo" />
   <h1>Digital Catalogue</h1>
   <div class="category-buttons" id="categoryButtons"></div>
   <div class="gallery" id="gallery"></div>
@@ -257,58 +266,73 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-links">
-        <a href="tel:8018114444"><img src="https://img.icons8.com/ios-filled/50/phone.png" alt="Phone" />8018114444</a>
-        <a href="https://parisbakery.in" target="_blank"><img src="https://img.icons8.com/ios-filled/50/domain.png" alt="Website" />parisbakery.in</a>
+        <a href="tel:8018114444">
+          <img src="https://img.icons8.com/ios-filled/50/phone.png" alt="Phone" />
+          <span>8018114444</span>
+        </a>
+        <a href="https://parisbakery.in" target="_blank">
+          <img src="https://img.icons8.com/ios-filled/50/domain.png" alt="Website" />
+          <span>parisbakery.in</span>
+        </a>
       </div>
       <div class="social-icons">
-        <a href="https://facebook.com/myparisbakery" target="_blank"><img src="https://img.icons8.com/ios-filled/50/facebook-new.png" alt="Facebook" />MyParisBakery</a>
-        <a href="https://instagram.com/parisbakery.in" target="_blank"><img src="https://img.icons8.com/ios-filled/50/instagram-new.png" alt="Instagram" />parisbakery.in</a>
+        <a href="https://facebook.com/myparisbakery" target="_blank">
+          <img src="https://img.icons8.com/ios-filled/50/facebook-new.png" alt="Facebook" />
+          <span>MyParisBakery</span>
+        </a>
+        <a href="https://instagram.com/parisbakery.in" target="_blank">
+          <img src="https://img.icons8.com/ios-filled/50/instagram-new.png" alt="Instagram" />
+          <span>parisbakery.in</span>
+        </a>
       </div>
     </div>
   </footer>
 
-  <!-- Order Modal -->
+  <!-- Modal -->
   <div id="orderModal">
-    <div class="modal">
-      <h2>Send Order via WhatsApp</h2>
+    <div class="modal-content">
+      <h3>Send via WhatsApp</h3>
       <label>Store</label>
-      <select id="storeDropdown">
-        <option value="">-- Select Store --</option>
+      <select id="storeSelect">
+        <option value="">Select store</option>
         <option value="sahid nagar">Sahid Nagar</option>
-        <option value="vn marg">V.N. Marg</option>
+        <option value="vn marg">VN Marg</option>
       </select>
 
-      <label>Your Name</label>
-      <input type="text" id="nameInput" placeholder="Enter your name" />
+      <label>Name</label>
+      <input type="text" id="userName" placeholder="Your name" />
 
       <label>Instructions</label>
-      <textarea id="instructionInput" placeholder="e.g. Write Happy Birthday" rows="3"></textarea>
+      <textarea id="userInstructions" rows="3" placeholder="Message or instructions..."></textarea>
 
-      <div class="modal-buttons">
-        <button id="cancelBtn">Cancel</button>
-        <button id="sendBtn">Send</button>
+      <div style="text-align:right">
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+        <button onclick="sendWhatsApp()">Send</button>
       </div>
     </div>
   </div>
 
   <script>
-    const gallery = document.getElementById("gallery");
-    const categoryButtons = document.getElementById("categoryButtons");
     const categories = ["0.5KG", "1KG", "1.5KG", "2KG", "2.5KG", "3KG", "3.5KG", "4KG", "5KG", "6KG", "7KG", "Above 7KG"];
     const imageCounts = {
       "0.5KG": 20, "1KG": 40, "1.5KG": 20, "2KG": 25,
       "2.5KG": 18, "3KG": 22, "3.5KG": 15, "4KG": 30,
       "5KG": 10, "6KG": 8, "7KG": 5, "Above 7KG": 9
     };
-    const imagesPerPage = 16;
-    let currentCategory = categories[0];
-    let currentPage = 1;
-    let selectedImage = "";
-
     const storeNumbers = {
       "sahid nagar": "+917682806910",
       "vn marg": "+917682806902"
     };
+
+    let currentCategory = categories[0];
+    let currentPage = 1;
+    let currentImageSrc = "";
+    let currentImageLabel = "";
+
+    const categoryButtons = document.getElementById("categoryButtons");
+    const gallery = document.getElementById("gallery");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
     function renderCategoryButtons() {
       categoryButtons.innerHTML = '';
@@ -316,12 +340,12 @@
         const btn = document.createElement("button");
         btn.textContent = cat;
         btn.classList.toggle("active", cat === currentCategory);
-        btn.onclick = () => {
+        btn.addEventListener("click", () => {
           currentCategory = cat;
           currentPage = 1;
           updateCategoryButtons();
-          loadPage("left");
-        };
+          loadPage(currentCategory, currentPage);
+        });
         categoryButtons.appendChild(btn);
       });
     }
@@ -332,90 +356,97 @@
       });
     }
 
-    function loadPage(direction = "right") {
-      const totalImages = imageCounts[currentCategory];
-      const start = (currentPage - 1) * imagesPerPage + 1;
-      const end = Math.min(start + imagesPerPage - 1, totalImages);
+    function loadPage(category, page) {
+      const basePath = "https://raw.githubusercontent.com/BakeryParis/Cakes/refs/heads/main/images";
+      const totalImages = imageCounts[category] || 0;
+      const start = (page - 1) * 16 + 1;
+      const end = Math.min(start + 15, totalImages);
+
       gallery.innerHTML = "";
 
       for (let i = start; i <= end; i++) {
-        const imgName = `1 (${i}).jpeg`;
-        const imgPath = `images/${currentCategory}/${imgName}`;
-        const imgURL = window.location.origin + '/' + imgPath;
+        const imageName = `1 (${i}).jpeg`;
+        const imagePath = `${basePath}/${encodeURIComponent(category)}/${encodeURIComponent(imageName)}`;
+        const label = `${category}#${String(i).padStart(4, '0')}`;
 
         const item = document.createElement("div");
         item.className = "gallery-item";
 
         const img = document.createElement("img");
-        img.src = imgPath;
-        img.alt = `Cake ${i}`;
+        img.src = imagePath;
+        img.alt = label;
         img.loading = "lazy";
         img.addEventListener("load", () => img.classList.add("loaded"));
-        img.onclick = () => {
-          selectedImage = imgURL;
-          document.getElementById("orderModal").style.display = "flex";
-        };
+        img.onerror = () => item.remove();
+        img.addEventListener("click", () => {
+          currentImageSrc = imagePath;
+          currentImageLabel = label;
+          openModal();
+        });
 
         const caption = document.createElement("div");
         caption.className = "cake-number";
-        caption.textContent = `${currentCategory}#${String(i).padStart(4, '0')}`;
+        caption.textContent = label;
 
         item.appendChild(img);
         item.appendChild(caption);
         gallery.appendChild(item);
       }
 
-      document.getElementById("prevBtn").disabled = currentPage === 1;
-      document.getElementById("nextBtn").disabled = currentPage >= Math.ceil(totalImages / imagesPerPage);
+      prevBtn.disabled = page === 1;
+      nextBtn.disabled = page >= Math.ceil(totalImages / 16);
     }
 
-    document.getElementById("prevBtn").onclick = () => {
+    prevBtn.onclick = () => {
       if (currentPage > 1) {
         currentPage--;
-        loadPage("right");
-        scrollTo(0, 0);
+        loadPage(currentCategory, currentPage);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
-    document.getElementById("nextBtn").onclick = () => {
-      const total = imageCounts[currentCategory];
-      if (currentPage < Math.ceil(total / imagesPerPage)) {
+    nextBtn.onclick = () => {
+      const total = imageCounts[currentCategory] || 0;
+      if (currentPage < Math.ceil(total / 16)) {
         currentPage++;
-        loadPage("left");
-        scrollTo(0, 0);
+        loadPage(currentCategory, currentPage);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
-    // Modal logic
-    document.getElementById("cancelBtn").onclick = () => {
-      document.getElementById("orderModal").style.display = "none";
-    };
+    function openModal() {
+      document.getElementById("orderModal").style.display = "flex";
+    }
 
-    document.getElementById("sendBtn").onclick = () => {
-      const store = document.getElementById("storeDropdown").value.toLowerCase().trim();
-      const name = document.getElementById("nameInput").value.trim();
-      const instructions = document.getElementById("instructionInput").value.trim();
+    function closeModal() {
+      document.getElementById("orderModal").style.display = "none";
+    }
+
+    function sendWhatsApp() {
+      const store = document.getElementById("storeSelect").value;
+      const name = document.getElementById("userName").value.trim();
+      const instructions = document.getElementById("userInstructions").value.trim();
 
       if (!store || !name) {
         alert("Please fill in all required fields.");
         return;
       }
 
-      let whatsappNumber = storeNumbers[store];
-      if (!whatsappNumber) {
-        whatsappNumber = prompt("Enter WhatsApp number for this store:");
-        if (!whatsappNumber) return;
+      let phone = storeNumbers[store.toLowerCase()];
+      if (!phone) {
+        phone = prompt("Enter WhatsApp number (with country code):");
+        if (!phone) return;
       }
 
-      const msg = `*Cake Order Request* 🍰\n\n*Name:* ${name}\n*Store:* ${store}\n*Instructions:* ${instructions}\n*Image:* ${selectedImage}`;
-      const url = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`;
+      const message = `Cake Order Request 🍰\n\nName: ${name}\nStore: ${store}\nCake: ${currentImageLabel}\nInstructions: ${instructions}\nImage: ${currentImageSrc}`;
+      const url = `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+
+      closeModal();
       window.open(url, "_blank");
-      document.getElementById("orderModal").style.display = "none";
-    };
+    }
 
     renderCategoryButtons();
-    loadPage();
+    loadPage(currentCategory, currentPage);
   </script>
-
 </body>
 </html>

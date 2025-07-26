@@ -368,6 +368,11 @@
     const gallery = document.getElementById("gallery");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
+    // Set minimum date for deliveryDate input to today
+document.addEventListener("DOMContentLoaded", () => {
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("deliveryDate").setAttribute("min", today);
+});
 
     function renderCategoryButtons() {
       categoryButtons.innerHTML = '';

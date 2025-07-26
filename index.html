@@ -195,6 +195,60 @@
     .social-icons img:hover {
       transform: scale(1.1);
     }
+
+    /* Modal */
+    #orderModal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      color: var(--color-accent);
+    }
+
+    .modal-content label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    .modal-content select,
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .modal-content .cancel {
+      background: gray;
+      margin-right: 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -234,20 +288,84 @@
     </div>
   </footer>
 
-  <script>
-    const gallery = document.getElementById("gallery");
-    const categoryButtons = document.getElementById("categoryButtons");
-    const categories = ["0.5KG", "1KG", "1.5KG", "2KG", "2.5KG", "3KG", "3.5KG", "4KG", "5KG", "6KG", "7KG", "Above 7KG"];
-    const imagesPerPage = 16;
-    let currentCategory = categories[0];
-    let currentPage = 1;
+  <!-- Modal -->
+  <div id="orderModal">
+    <div class="modal-content">
+      <h3>Send via WhatsApp</h3>
+      <label>Store</label>
+      <select id="storeSelect">
+        <option value="">Select store</option>
+        <option value="online">Order Online</option>
+        <option value="baramunda">Baramunda</option>
+        <option value="cda10">CDA-10</option>
+        <option value="cda10">CDA-6</option>
+        <option value="hanspal">Hanspal</option>
+        <option value="jagamara">Jagamara</option>
+        <option value="jharpada">Jharpada</option>
+        <option value="jaydev vihar">Jaydev Vihar</option>
+        <option value="puri">Puri</option>
+        <option value="raghunathpur">Raghunathpur</option>
+        <option value="sahid nagar">Sahid Nagar</option>
+        <option value="sailasri vihar">Sailasrivihar</option>
+        <option value="soubhagya nagar">Soubhagyanagar</option>
+        <option value="unit4">Unit-4</option>
+        <option value="vn marg">Vivekanand Marg</option>
+        <option value="other">Other</option>
 
+      </select>
+
+      <label>Name</label>
+      <input type="text" id="userName" placeholder="Your name" />
+
+      <label>Instructions</label>
+      <textarea id="userInstructions" rows="3" placeholder="Message or instructions..."></textarea>
+
+      <label>Delivery Date</label>
+      <input type="date" id="deliveryDate" />
+
+      <label>Delivery Time</label>
+      <input type="time" id="deliveryTime" />
+
+      <div style="text-align:right">
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+        <button onclick="sendWhatsApp()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const categories = ["0.5KG", "1KG", "1.5KG", "2KG", "2.5KG", "3KG", "3.5KG", "4KG", "5KG", "6KG", "7KG", "Above 7KG"];
     const imageCounts = {
-      "0.5KG": 20, "1KG": 40, "1.5KG": 20, "2KG": 25,
-      "2.5KG": 18, "3KG": 22, "3.5KG": 15, "4KG": 30,
-      "5KG": 10, "6KG": 8, "7KG": 5, "Above 7KG": 9
+      "0.5KG": 100, "1KG": 100, "1.5KG": 100, "2KG": 100,
+      "2.5KG": 100, "3KG": 100, "3.5KG": 100, "4KG": 100,
+      "5KG": 100, "6KG": 100, "7KG": 100, "Above 7KG": 100
+    };
+    const storeNumbers = {
+      "sahid nagar": "+917682806910",
+      "vn marg": "+917682806902",
+      "jagamara": "+917682806913",
+      "jharpada": "+917682806911",
+      "unit4": "+917682806901",
+      "baramunda": "+917682806912",
+      "cda-6": "+917682806909",
+      "cda-10": "+917682806923",
+      "puri": "+917682806924",
+      "sailasri vihar": "+917682806919",
+      "jaydev vihar": "+917605958456",
+      "raghunathpur": "+919124556211",
+      "soubhagya nagar": "+918093666534",
+      "hanspal": "+918093666534",
+      "online": "+918018114444",
+      "Other":""
     };
 
+    let currentCategory = categories[0];
+    let currentPage = 1;
+    let currentImageSrc = "";
+    let currentImageLabel = "";
+
+    const categoryButtons = document.getElementById("categoryButtons");
+    const gallery = document.getElementById("gallery");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
 
@@ -274,30 +392,36 @@
     }
 
     function loadPage(category, page) {
+      const basePath = "https://raw.githubusercontent.com/BakeryParis/Cakes/refs/heads/main/images";
       const totalImages = imageCounts[category] || 0;
-      const start = (page - 1) * imagesPerPage + 1;
-      const end = Math.min(start + imagesPerPage - 1, totalImages);
+      const start = (page - 1) * 16 + 1;
+      const end = Math.min(start + 15, totalImages);
 
       gallery.innerHTML = "";
+
       for (let i = start; i <= end; i++) {
         const imageName = `1 (${i}).jpeg`;
-        const imagePath = `images/${category}/${imageName}`;
+        const imagePath = `${basePath}/${encodeURIComponent(category)}/${encodeURIComponent(imageName)}`;
+        const label = `${category}#${String(i).padStart(4, '0')}`;
 
         const item = document.createElement("div");
         item.className = "gallery-item";
 
         const img = document.createElement("img");
         img.src = imagePath;
-        img.alt = `Cake ${i}`;
+        img.alt = label;
         img.loading = "lazy";
+        img.addEventListener("load", () => img.classList.add("loaded"));
         img.onerror = () => item.remove();
-        img.addEventListener("load", () => {
-          img.classList.add("loaded");
+        img.addEventListener("click", () => {
+          currentImageSrc = imagePath;
+          currentImageLabel = label;
+          openModal();
         });
 
         const caption = document.createElement("div");
         caption.className = "cake-number";
-        caption.textContent = `${category}#${String(i).padStart(4, '0')}`;
+        caption.textContent = label;
 
         item.appendChild(img);
         item.appendChild(caption);
@@ -305,25 +429,66 @@
       }
 
       prevBtn.disabled = page === 1;
-      nextBtn.disabled = page >= Math.ceil(totalImages / imagesPerPage);
+      nextBtn.disabled = page >= Math.ceil(totalImages / 16);
     }
 
-    prevBtn.addEventListener("click", () => {
+    prevBtn.onclick = () => {
       if (currentPage > 1) {
         currentPage--;
         loadPage(currentCategory, currentPage);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    });
+    };
 
-    nextBtn.addEventListener("click", () => {
+    nextBtn.onclick = () => {
       const total = imageCounts[currentCategory] || 0;
-      if (currentPage < Math.ceil(total / imagesPerPage)) {
+      if (currentPage < Math.ceil(total / 16)) {
         currentPage++;
         loadPage(currentCategory, currentPage);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    });
+    };
+
+    function openModal() {
+      document.getElementById("orderModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("orderModal").style.display = "none";
+    }
+
+    function sendWhatsApp() {
+      const store = document.getElementById("storeSelect").value;
+      const name = document.getElementById("userName").value.trim();
+      const instructions = document.getElementById("userInstructions").value.trim();
+      const deliveryDate = document.getElementById("deliveryDate").value;
+      const deliveryTime = document.getElementById("deliveryTime").value;
+
+      if (!store || !name) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      let phone = storeNumbers[store.toLowerCase()];
+      if (!phone) {
+        phone = prompt("Enter WhatsApp number (with country code):");
+        if (!phone) return;
+      }
+
+      const message = `Cake Order Request 🍰\n\n` +
+        `Name: ${name}\n` +
+        `Store: ${store}\n` +
+        `Cake: ${currentImageLabel}\n` +
+        `Delivery Date: ${deliveryDate || "Not specified"}\n` +
+        `Delivery Time: ${deliveryTime || "Not specified"}\n` +
+        `Instructions: ${instructions}\n` +
+        `Image: ${currentImageSrc}`;
+
+      const url = `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+
+      closeModal();
+      window.open(url, "_blank");
+    }
 
     renderCategoryButtons();
     loadPage(currentCategory, currentPage);

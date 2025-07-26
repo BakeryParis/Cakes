@@ -302,7 +302,6 @@
         <option value="unit4">Unit-4</option>
         <option value="baramunda">Baramunda</option>
         <option value="other">Other</option>
-        
       </select>
 
       <label>Name</label>
@@ -310,6 +309,12 @@
 
       <label>Instructions</label>
       <textarea id="userInstructions" rows="3" placeholder="Message or instructions..."></textarea>
+
+      <label>Delivery Date</label>
+      <input type="date" id="deliveryDate" />
+
+      <label>Delivery Time</label>
+      <input type="time" id="deliveryTime" />
 
       <div style="text-align:right">
         <button class="cancel" onclick="closeModal()">Cancel</button>
@@ -333,7 +338,6 @@
       "unit4": "+917682806901",
       "baramunda": "+917682806912",
       "Other":""
-
     };
 
     let currentCategory = categories[0];
@@ -438,6 +442,8 @@
       const store = document.getElementById("storeSelect").value;
       const name = document.getElementById("userName").value.trim();
       const instructions = document.getElementById("userInstructions").value.trim();
+      const deliveryDate = document.getElementById("deliveryDate").value;
+      const deliveryTime = document.getElementById("deliveryTime").value;
 
       if (!store || !name) {
         alert("Please fill in all required fields.");
@@ -450,7 +456,15 @@
         if (!phone) return;
       }
 
-      const message = `Cake Order Request 🍰\n\nName: ${name}\nStore: ${store}\nCake: ${currentImageLabel}\nInstructions: ${instructions}\nImage: ${currentImageSrc}`;
+      const message = `Cake Order Request 🍰\n\n` +
+        `Name: ${name}\n` +
+        `Store: ${store}\n` +
+        `Cake: ${currentImageLabel}\n` +
+        `Delivery Date: ${deliveryDate || "Not specified"}\n` +
+        `Delivery Time: ${deliveryTime || "Not specified"}\n` +
+        `Instructions: ${instructions}\n` +
+        `Image: ${currentImageSrc}`;
+
       const url = `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
 
       closeModal();

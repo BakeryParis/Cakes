@@ -39,34 +39,19 @@
       font-weight: 600;
     }
 
-.category-buttons {
-  display: flex;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  gap: 8px;
-  padding: 10px;
-  margin-bottom: 20px;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
-}
+    .category-buttons {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      padding: 10px;
+      margin-bottom: 20px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
 
-.category-buttons::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-.category-buttons button {
-  background: #fff;
-  border: 1px solid var(--color-border);
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--color-text);
-  transition: 0.25s;
-  min-width: max-content; /* Ensures buttons don’t shrink */
-}
-
-
+    .category-buttons::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
 
     .category-buttons button {
       background: #fff;
@@ -77,6 +62,7 @@
       font-size: 0.9rem;
       color: var(--color-text);
       transition: 0.25s;
+      flex: 0 0 auto;
     }
 
     .category-buttons button:hover,
@@ -216,7 +202,6 @@
       transform: scale(1.1);
     }
 
-    /* Modal */
     #orderModal {
       display: none;
       position: fixed;

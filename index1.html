@@ -39,7 +39,7 @@
       font-weight: 600;
     }
 
-    .category-buttons {
+.category-buttons {
   display: flex;
   overflow-x: auto;
   flex-wrap: nowrap;
@@ -53,6 +53,19 @@
 .category-buttons::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+.category-buttons button {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  transition: 0.25s;
+  min-width: max-content; /* Ensures buttons don’t shrink */
+}
+
 
 
     .category-buttons button {

@@ -40,13 +40,20 @@
     }
 
     .category-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      padding: 0 10px;
-    }
+  display: flex;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.category-buttons::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 
     .category-buttons button {
       background: #fff;

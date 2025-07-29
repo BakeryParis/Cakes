@@ -41,11 +41,18 @@
 
     .category-buttons {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      overflow-x: auto;
       gap: 8px;
+      padding: 10px 0;
       margin-bottom: 20px;
-      padding: 0 10px;
+      width: 92vw;
+      max-width: 1200px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+
+    .category-buttons::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
     }
 
     .category-buttons button {
@@ -57,6 +64,7 @@
       font-size: 0.9rem;
       color: var(--color-text);
       transition: 0.25s;
+      flex: 0 0 auto;
     }
 
     .category-buttons button:hover,
@@ -196,7 +204,6 @@
       transform: scale(1.1);
     }
 
-    /* Modal */
     #orderModal {
       display: none;
       position: fixed;
@@ -248,7 +255,6 @@
       background: gray;
       margin-right: 10px;
     }
-
   </style>
 </head>
 <body>

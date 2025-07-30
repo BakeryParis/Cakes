@@ -3,34 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <title>Spin and Win (Pointer Accurate)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: sans-serif; background: #f0f0f0; text-align: center; padding: 40px; }
-    .wheel-container { position: relative; width: 400px; height: 400px; margin: 40px auto; }
-    #wheel { background: #fff; border-radius: 50%; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background: #f0f0f0;
+    }
+    body {
+      min-height: 100vh;
+      text-align: center;
+      box-sizing: border-box;
+      padding: 4vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      background: #f0f0f0;
+    }
+    h1 {
+      font-size: 6vw;
+      margin: 2vw 0 3vw 0;
+    }
+    .wheel-container {
+      position: relative;
+      width: 85vw;
+      max-width: 400px;
+      height: 85vw;
+      max-height: 400px;
+      margin: 0 auto 6vw auto;
+      background: transparent;
+    }
+    #wheel {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 50%;
+      display: block;
+      margin: 0 auto;
+      touch-action: none;
+    }
     .pointer {
       position: absolute;
       width: 0; height: 0;
-      border-left: 30px solid transparent;
-      border-right: 30px solid transparent;
-      border-bottom: 40px solid #d32f2f;
-      top: -40px; left: 50%;
+      border-left: 7.5vw solid transparent;
+      border-right: 7.5vw solid transparent;
+      border-bottom: 10vw solid #d32f2f;
+      max-width: 60px;
+      max-height: 40px;
+      top: -10vw;
+      left: 50%;
       transform: translateX(-50%);
       z-index: 2;
     }
     #spinBtn {
-      padding: 15px 35px;
+      padding: 3vw 7vw;
       background: #388e3c;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 1.2em;
+      border-radius: 2vw;
+      font-size: 5vw;
       cursor: pointer;
-      margin-top: 20px;
-      box-shadow: 0 4px 14px #aaa;
+      margin-top: 4vw;
+      box-shadow: 0 2vw 4vw #aaa;
       transition: background 0.2s;
+      max-width: 350px;
+      width: 80vw;
     }
     #spinBtn:active { background: #256029; }
-    #result { margin-top: 30px; font-size: 1.3em; font-weight: bold; color: #333; }
+    #result {
+      margin-top: 6vw;
+      font-size: 5vw;
+      font-weight: bold;
+      color: #333;
+      word-break: break-word;
+      max-width: 90vw;
+    }
+    @media (min-width: 500px) {
+      h1 { font-size: 30px; }
+      #spinBtn { font-size: 22px; padding: 15px 35px; border-radius: 16px; }
+      #result { font-size: 24px; }
+      .pointer { border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 40px solid #d32f2f; top: -40px; max-width: 60px; max-height: 40px;}
+      .wheel-container { width: 400px; height: 400px; }
+    }
   </style>
 </head>
 <body>
@@ -51,7 +108,7 @@
       "🧁 Cup Cake",
       "🍞 Bread",
       "🎂 Small Cake",
-      "💯 100% Off"
+      "💯 100% Discount"
     ];
     const colors = [
       "#f44336",
@@ -63,21 +120,32 @@
       "#ff9800",
       "#ffc107"
     ];
-    const wheelCanvas = document.getElementById('wheel');
-    const ctx = wheelCanvas.getContext('2d');
+    // Responsive canvas
+    function resizeCanvas() {
+      const cont = document.querySelector('.wheel-container');
+      let size = Math.min(cont.offsetWidth, cont.offsetHeight);
+      if(window.innerWidth < 500) size = Math.min(window.innerWidth * 0.85, window.innerHeight * 0.45);
+      canvas.width = size;
+      canvas.height = size;
+      wheelRadius = size / 2;
+      drawWheel(currentAngle);
+    }
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
     const spinBtn = document.getElementById('spinBtn');
     const resultDiv = document.getElementById('result');
     const numSlices = prizes.length;
     const arcSize = 2 * Math.PI / numSlices;
-    const wheelRadius = wheelCanvas.width / 2;
+    let wheelRadius = canvas.width / 2;
     let currentAngle = 0; // in radians
     let spinning = false;
 
     function drawWheel(angle = 0) {
-      ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(wheelRadius, wheelRadius);
       for (let i = 0; i < numSlices; i++) {
         ctx.save();
-        ctx.translate(wheelRadius, wheelRadius);
         ctx.rotate(angle + i * arcSize);
         // Draw arc
         ctx.beginPath();
@@ -91,15 +159,18 @@
         ctx.rotate(arcSize / 2);
         ctx.textAlign = "right";
         ctx.fillStyle = "#fff";
-        ctx.font = "bold 18px sans-serif";
+        // Responsive font size
+        ctx.font = `bold ${Math.max(wheelRadius/10, 12)}px sans-serif`;
         ctx.fillText(prizes[i], wheelRadius - 30, 10);
         ctx.restore();
         ctx.restore();
       }
+      ctx.restore();
     }
 
-    // Call initially
-    drawWheel();
+    // Initial draw and resize
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
     function spinWheel() {
       if (spinning) return;

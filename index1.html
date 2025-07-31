@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Spin and Win (Pointer Accurate)</title>
   <style>
-    body { font-family: sans-serif; background: #f0f0f0; text-align: center; padding: 40px; }
-    .wheel-container { position: relative; width: 400px; height: 400px; margin: 40px auto; opacity: 0.4; transition: opacity 0.3s; }
+    body { font-family: sans-serif; background: #f0f0f0; text-align: center; padding: 20px; }
+    .wheel-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 20px auto;
+      opacity: 0.4;
+      transition: opacity 0.3s;
+    }
     .wheel-container.visible { opacity: 1; }
-    #wheel { background: #fff; border-radius: 50%; }
+    #wheel {
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        border-radius: 50%;
+    }
     .pointer {
       position: absolute;
       width: 0; height: 0;
@@ -35,6 +48,7 @@
     }
     #spinBtn:active { background: #256029; }
     #result { margin-top: 30px; font-size: 1.3em; font-weight: bold; color: #333; }
+    #voucherMsg { margin-top: 18px; font-size: 1.1em; color: #388e3c; min-height: 22px; }
     #mobileForm {
       margin: 0 auto 20px auto;
       background: #fff;
@@ -70,9 +84,46 @@
       font-size: 1em;
       min-height: 20px;
     }
+    .tnc {
+      margin-top: 20px;
+      font-size: 0.97em;
+      color: #888;
+      letter-spacing: 1px;
+      font-style: italic;
+    }
+
+    @media (max-width: 480px) {
+        body { padding: 20px 15px; }
+        h1 { font-size: 1.8em; }
+        .wheel-container {
+            width: 90vw;
+            height: 90vw;
+            max-width: 400px;
+            max-height: 400px;
+            margin-top: 50px;
+        }
+        #mobileForm {
+            padding: 20px;
+        }
+        #mobileInput {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        #submitMobile {
+            width: 100%;
+        }
+        #result { font-size: 1.15em; }
+        #voucherMsg { font-size: 1em; }
+    }
   </style>
-  <!-- Add supabase JS client -->
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
+  <!-- New Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
   <h1>Spin and Win!</h1>
@@ -82,67 +133,54 @@
     <button type="submit" id="submitMobile">Continue</button>
     <div id="mobileError"></div>
   </form>
+
   <div class="wheel-container" id="wheelContainer">
     <canvas id="wheel" width="400" height="400"></canvas>
     <div class="pointer"></div>
   </div>
   <button id="spinBtn">SPIN</button>
   <div id="result"></div>
+  <div id="voucherMsg"></div>
+  <div class="tnc">*T&amp;C Applicable</div>
+
   <script>
-    // --------- CONFIGURE SUPABASE ---------
-    // Replace with your Supabase project credentials
     const SUPABASE_URL = 'https://dfepjaivpgomxsjbxnhz.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmZXBqYWl2cGdvbXhzamJ4bmh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4MjY0NTMsImV4cCI6MjA2NTQwMjQ1M30.5ASDRBIH0CQ-4d2_1g8hfsZlotOp1EbU9v9nZXZdRIM';
-
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // --------- WHEEL CONFIG ---------
     const prizes = [
-      "🪙 Rs.30/- off",
-      "💰 Rs.50/- off",
-      "💵 Rs.100/- off",
-      "🍰 Pastry free",
-      "🧁 1 Cup Cake",
-      "🧁 2 Cup Cake",
-      "🎂 Small Cake",
-      "💯 100% Off"
+      "🪙 Rs.30/- off", "💰 Rs.50/- off", "💵 Rs.100/- off", "🍰 Pastry free",
+      "🧁 1 Cup Cake", "🧁 2 Cup Cake", "🎂 Small Cake", "💯 100% Off"
     ];
     const colors = [
-      "#f44336",
-      "#e91e63",
-      "#9c27b0",
-      "#3f51b5",
-      "#009688",
-      "#4caf50",
-      "#ff9800",
-      "#ffc107"
+      "#f44336", "#e91e63", "#9c27b0", "#3f51b5",
+      "#009688", "#4caf50", "#ff9800", "#ffc107"
     ];
+
     const wheelCanvas = document.getElementById('wheel');
     const ctx = wheelCanvas.getContext('2d');
     const spinBtn = document.getElementById('spinBtn');
     const resultDiv = document.getElementById('result');
+    const voucherMsg = document.getElementById('voucherMsg');
     const numSlices = prizes.length;
     const arcSize = 2 * Math.PI / numSlices;
     const wheelRadius = wheelCanvas.width / 2;
-    let currentAngle = 0; // in radians
+    let currentAngle = 0;
     let spinning = false;
     let userMobile = null;
 
-    // --------- DRAW WHEEL ---------
     function drawWheel(angle = 0) {
       ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
       for (let i = 0; i < numSlices; i++) {
         ctx.save();
         ctx.translate(wheelRadius, wheelRadius);
         ctx.rotate(angle + i * arcSize);
-        // Draw arc
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, wheelRadius - 8, 0, arcSize);
         ctx.closePath();
         ctx.fillStyle = colors[i % colors.length];
         ctx.fill();
-        // Draw text
         ctx.save();
         ctx.rotate(arcSize / 2);
         ctx.textAlign = "right";
@@ -155,27 +193,48 @@
     }
     drawWheel();
 
-    // --------- SPIN LOGIC ---------
+    // ✅ New Confetti Blast using canvas-confetti
+    function blastConfetti() {
+      const duration = 2 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
     function spinWheel() {
       if (spinning) return;
       spinning = true;
       resultDiv.textContent = "";
+      voucherMsg.textContent = "";
 
-      // Only allow winning on first 6 slices
       const eligibleSlices = numSlices - 2;
       const randomIdx = Math.floor(Math.random() * eligibleSlices);
       const sliceAngle = (2 * Math.PI) / numSlices;
       const randomSliceAngle = randomIdx * sliceAngle;
-      // The pointer is at the top center, so the top (12 o'clock) is where the winning segment should land
       const targetAngle = (3 * Math.PI / 2) - (randomSliceAngle + sliceAngle / 2);
-      const extraSpins = 5; // full spins
+      const extraSpins = 5;
       const finalAngle = targetAngle + extraSpins * 2 * Math.PI;
 
       animateSpin(currentAngle, finalAngle, 4000, async () => {
         spinning = false;
         currentAngle = finalAngle % (2 * Math.PI);
 
-        // Save spin result in supabase
         try {
           const { error } = await supabase
             .from('spin')
@@ -188,6 +247,8 @@
             resultDiv.textContent = "Error saving your spin. Please try again.";
           } else {
             resultDiv.textContent = "You won: " + prizes[randomIdx] + "!";
+            voucherMsg.textContent = "You will get the voucher within 24 hrs on your number through WhatsApp.";
+            blastConfetti();
             spinBtn.style.display = "none";
           }
         } catch (e) {
@@ -201,7 +262,6 @@
       function animate(now) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
-        // ease out cubic
         const ease = 1 - Math.pow(1 - progress, 3);
         const angle = from + (to - from) * ease;
         drawWheel(angle);
@@ -217,13 +277,11 @@
 
     spinBtn.addEventListener('click', spinWheel);
 
-    // --------- MOBILE NUMBER FORM ---------
     const mobileForm = document.getElementById('mobileForm');
     const mobileInput = document.getElementById('mobileInput');
     const mobileError = document.getElementById('mobileError');
     const wheelContainer = document.getElementById('wheelContainer');
 
-    // Initially wheel is semi-visible and spin button is hidden
     wheelContainer.classList.remove('visible');
     spinBtn.style.display = "none";
 
@@ -231,14 +289,12 @@
       e.preventDefault();
       const mobile = mobileInput.value.trim();
 
-      // Validate mobile number (10 digits)
       if (!/^\d{10}$/.test(mobile)) {
         mobileError.textContent = "Please enter a valid 10 digit mobile number.";
         return;
       }
       mobileError.textContent = "Checking...";
 
-      // Check for duplicate spin
       try {
         const { data, error } = await supabase
           .from('spin')
@@ -255,29 +311,28 @@
           return;
         }
 
-        // Allowed to spin
         userMobile = mobile;
         mobileError.textContent = "";
         mobileForm.style.display = "none";
         wheelContainer.classList.add('visible');
         spinBtn.style.display = "inline-block";
         resultDiv.textContent = "";
+        voucherMsg.textContent = "";
       } catch (e) {
         mobileError.textContent = "Error checking your spin. Please try again.";
       }
     });
 
-    // Prevent page refresh on enter
     mobileForm.addEventListener('keydown', function(evt){
       if(evt.key === "Enter") evt.preventDefault();
     });
 
-    // On reload: reset UI
     window.onload = () => {
       mobileForm.style.display = "";
       wheelContainer.classList.remove('visible');
       spinBtn.style.display = "none";
       resultDiv.textContent = "";
+      voucherMsg.textContent = "";
       userMobile = null;
       mobileInput.value = "";
       mobileError.textContent = "";

@@ -13,8 +13,10 @@
       width: 0; height: 0;
       border-left: 30px solid transparent;
       border-right: 30px solid transparent;
-      border-bottom: 40px solid #d32f2f;
-      top: -40px; left: 50%;
+      border-top: 40px solid #d32f2f;
+      border-bottom: none;
+      top: -40px;
+      left: 50%;
       transform: translateX(-50%);
       z-index: 2;
     }
@@ -164,6 +166,7 @@
       const randomIdx = Math.floor(Math.random() * eligibleSlices);
       const sliceAngle = (2 * Math.PI) / numSlices;
       const randomSliceAngle = randomIdx * sliceAngle;
+      // The pointer is at the top center, so the top (12 o'clock) is where the winning segment should land
       const targetAngle = (3 * Math.PI / 2) - (randomSliceAngle + sliceAngle / 2);
       const extraSpins = 5; // full spins
       const finalAngle = targetAngle + extraSpins * 2 * Math.PI;

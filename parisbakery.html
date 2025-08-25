@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cake Shop</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fff0f6, #ffe5f1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Floating background animation */
+    .bubbles span {
+      position: absolute;
+      bottom: -50px;
+      width: 30px;
+      height: 30px;
+      background: rgba(232, 43, 186, 0.15);
+      border-radius: 50%;
+      animation: rise 12s infinite ease-in;
+    }
+    .bubbles span:nth-child(2) { left: 20%; animation-duration: 9s; width: 20px; height: 20px; }
+    .bubbles span:nth-child(3) { left: 40%; animation-duration: 11s; width: 25px; height: 25px; }
+    .bubbles span:nth-child(4) { left: 60%; animation-duration: 8s; width: 15px; height: 15px; }
+    .bubbles span:nth-child(5) { left: 80%; animation-duration: 10s; width: 22px; height: 22px; }
+
+    @keyframes rise {
+      0% { transform: translateY(0); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    header img {
+      max-width: 140px;
+      height: auto;
+      margin-bottom: 25px;
+      animation: bounce 3s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #e82bba;
+      margin-bottom: 35px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 80%;
+      max-width: 280px;
+    }
+
+    .btn {
+      background: #e82bba;
+      color: #fff;
+      text-decoration: none;
+      padding: 14px;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(232, 43, 186, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: skewX(-45deg);
+      transition: 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: scale(1.07);
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating background -->
+  <div class="bubbles">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <header>
+    <img src="logo.png" alt="Cake Shop Logo">
+    <h1>Welcome to Our Cake Shop</h1>
+  </header>
+
+  <div class="buttons">
+    <a href="index.html" class="btn">🍰 Explore Cakes</a>
+    <a href="index1.html" class="btn">🎂 Order Now</a>
+  </div>
+</body>
+</html>
